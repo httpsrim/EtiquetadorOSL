@@ -58,15 +58,6 @@ CREATE TABLE models (
 );
 
 
--- Tabla asociacion de SN
-CREATE TABLE sn_pc (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    sn_id INT NOT NULL,
-    pc_id INT NOT NULL,
-    FOREIGN KEY (sn_id) REFERENCES sn(id),
-    FOREIGN KEY (pc_id) REFERENCES pc(id)
-);
-
 -- Valores por defecto para RAM
 INSERT INTO ram (capacity) VALUES("2");
 INSERT INTO ram (capacity) VALUES("4");
@@ -86,27 +77,3 @@ INSERT INTO disc (capacity) VALUES("1000");
 
 -- Valores por defecto para SN
 INSERT INTO sn (prefix,num) VALUES("OSL", 0);
-
--- Tabla para gestión de roles
-CREATE TABLE roles (
-    rol_id INT NOT NULL AUTO_INCREMENT,
-    nombre_rol VARCHAR(50) NOT NULL UNIQUE COMMENT 'Ej: admin, usuario',
-    descripcion TEXT DEFAULT NULL,
-    PRIMARY KEY (rol_id)
-);
-
-INSERT IGNORE INTO roles (nombre_rol, descripcion) VALUES ('admin', 'Administrador del sistema con acceso completo'); --id = 1
-INSERT IGNORE INTO roles (nombre_rol, descripcion) VALUES ('user', 'Usuario con acceso limitado'); --id = 2
--- Tabla para gestión de usuarios
-CREATE TABLE users (
-    id INT NOT NULL AUTO_INCREMENT,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    rol_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (rol_id) REFERENCES roles(rol_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    PRIMARY KEY (id, rol_id)
-);
-
-INSERT IGNORE INTO users (username, password, rol_id) VALUES ('admin', '$2y$10$HLE6Q/BaoIwGatfFkHktfe8wuI.yULULMPi/TKyGIAUWr6wKxiY1i', 1);
